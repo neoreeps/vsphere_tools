@@ -1,15 +1,4 @@
 #!/usr/bin/env python
-"""
-vtools.py: Connects to vSphere or vCenter to list or migrate objects.
-"""
-__author__ = "Kenny Speer"
-__copyright__ = "Copyright 2015"
-__credits__ = ["Kenny Speer"]
-__license__ = "GPL"
-__version__ = "1.0.2"
-__maintainer__ = "Kenny Speer"
-__email__ = "kenny.speer@gmail.com"
-__status__ = "Production"
 
 from pyVim.connect import SmartConnect, Disconnect
 from pyVmomi import vim
@@ -21,6 +10,19 @@ import getpass
 import ssl
 import sys
 import time
+
+
+"""
+vtools.py: Connects to vSphere or vCenter to list or migrate objects.
+"""
+__author__ = "Kenny Speer"
+__copyright__ = "Copyright 2015"
+__credits__ = ["Kenny Speer"]
+__license__ = "GPL"
+__version__ = "1.0.2"
+__maintainer__ = "Kenny Speer"
+__email__ = "kenny.speer@gmail.com"
+__status__ = "Production"
 
 
 # global options
@@ -154,7 +156,9 @@ def print_host_stats(hosts):
         print('MEMORY: %d GB' %
               (int(host.summary.hardware.memorySize)/1024**3 + 1))
 
+        pprint(vars(host.summary.hardware))
         if DEBUG:
+            pprint(vars(host.config))
             pprint(vars(host.summary))
             pprint(vars(host.summary.quickStats))
 
@@ -184,13 +188,24 @@ def print_vm_stats(vms):
     assert isinstance(vms, (list, tuple))
 
     for vm in vms:
-        print('NAME: %s' % vm.summary.config.name)
+        print('\n\n--\nNAME: %s' % vm.summary.config.name)
         print('HOST: %s' % vm.runtime.host.name)
         print('MEM:  %s' % vm.summary.config.memorySizeMB)
         print('STATE: %s' % vm.runtime.powerState)
+        print('IPADDR: %s' % vm.summary.guest.ipAddress)
+        # pprint(vars(vm.summary.guest.net))
+
+        for dev in vm.config.hardware.device:
+            if isinstance(dev, vim.vm.device.VirtualEthernetCard):
+                print('MACADDR: %s' % dev.macAddress)
+                if DEBUG:
+                    pprint(vars(dev))
 
         if DEBUG:
+            pprint(vars(vm))
+            pprint(vars(vm.summary))
             pprint(vars(vm.summary.config))
+            pprint(vars(vm.summary.guest))
             pprint(vars(vm.runtime))
 
     print('TOTAL VMS: %s' % len(vms))

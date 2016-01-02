@@ -5,7 +5,7 @@ This repository contains tools used to manage and manipulate vmware vSphere and 
 * vtools.py - tool used to list vms and servers and to perform migration of VMs
 
 # Requirements
-* pyVmomi - official vmware vsphere python APIs (replaces pysphere which is not deprecated)
+* pyVmomi - official vmware vsphere python APIs (replaces pysphere which is now deprecated)
 
 # vTools
 ```
@@ -144,11 +144,11 @@ DATA
     __license__ = 'GPL'
     __maintainer__ = 'Kenny Speer'
     __status__ = 'Production'
-    __version__ = '1.0.2'
+    __version__ = '1.0.3'
     vim = <pyVmomi.VmomiSupport.LazyModule object>
 
 VERSION
-    1.0.2
+    1.0.3
 
 AUTHOR
     Kenny Speer
